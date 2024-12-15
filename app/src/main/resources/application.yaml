@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+pages:
+  pageList:
+    -
+      id: 1
+      slug: firstSlug
+      name: firstName
+      body: simpleBody
+    -
+      id: 2
+      slug: secondSlug
+      name: secondName
+      body: simpleBody
+    -
+      id: 3
+      slug: slug
+      name: name
+      body: body
