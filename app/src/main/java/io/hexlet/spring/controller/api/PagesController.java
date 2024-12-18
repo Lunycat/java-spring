@@ -1,5 +1,6 @@
 package io.hexlet.spring.controller.api;
 
+import io.hexlet.spring.dto.PageCreateDTO;
 import io.hexlet.spring.dto.PageDTO;
 import io.hexlet.spring.exception.ResourceNotFoundException;
 import io.hexlet.spring.model.Page;
@@ -29,9 +30,10 @@ public class PagesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Page create(@RequestBody Page page) {
+    public PageDTO create(@RequestBody PageCreateDTO pageCreateDTO) {
+        Page page = toPage(pageCreateDTO);
         pageRepository.save(page);
-        return page;
+        return new PageDTO(page);
     }
 
     @GetMapping("/{id}")
@@ -58,5 +60,13 @@ public class PagesController {
     @DeleteMapping("/{id}")
     public void destroy(@PathVariable Long id) {
         pageRepository.deleteById(id);
+    }
+
+    private Page toPage(PageCreateDTO pageCreateDTO) {
+        Page page = new Page();
+        page.setSlug(pageCreateDTO.getSlug());
+        page.setName(pageCreateDTO.getName());
+        page.setBody(pageCreateDTO.getBody());
+        return page;
     }
 }
