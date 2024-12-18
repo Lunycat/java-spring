@@ -1,5 +1,7 @@
 package io.hexlet.spring.controller.api;
 
+import io.hexlet.spring.dto.PageDTO;
+import io.hexlet.spring.exception.ResourceNotFoundException;
 import io.hexlet.spring.model.Page;
 import io.hexlet.spring.repository.PageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,26 +12,33 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/pages")
 public class PagesController {
 
     @Autowired
     private PageRepository pageRepository;
 
-    @GetMapping("/pages")
-    public List<Page> index(@RequestParam(defaultValue = "10") Integer limit) {
-        return pageRepository.findAll().stream().limit(limit).toList();
+    @GetMapping
+    public List<PageDTO> index(@RequestParam(defaultValue = "10") Integer limit) {
+        List<Page> pages = pageRepository.findAll();
+        return pages.stream()
+                .limit(limit)
+                .map(PageDTO::new)
+                .toList();
     }
 
-    @PostMapping("/pages")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Page create(@RequestBody Page page) {
         pageRepository.save(page);
         return page;
     }
 
-    @GetMapping("pages/{id}")
-    public Optional<Page> show(@PathVariable Long id) {
-        return pageRepository.findById(id);
+    @GetMapping("/{id}")
+    public PageDTO show(@PathVariable Long id) {
+        Page page = pageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found"));
+        return new PageDTO(page);
     }
 
     @PutMapping
@@ -46,7 +55,7 @@ public class PagesController {
         return data;
     }
 
-    @DeleteMapping("/pages/{id}")
+    @DeleteMapping("/{id}")
     public void destroy(@PathVariable Long id) {
         pageRepository.deleteById(id);
     }
