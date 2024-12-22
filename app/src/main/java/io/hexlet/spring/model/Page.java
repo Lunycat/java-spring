@@ -45,7 +45,7 @@ public class Page {
 
     @LastModifiedDate
     private LocalDateTime updateAt;
-    
+
     @CreatedDate
     private LocalDateTime createAt;
 }

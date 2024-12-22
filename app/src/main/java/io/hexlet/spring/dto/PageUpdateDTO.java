@@ -4,12 +4,15 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.openapitools.jackson.nullable.JsonNullable;
+
 @Getter
 @Setter
 public class PageUpdateDTO {
 
     @NotNull
-    private String name;
+    private JsonNullable<String> name;
 
-    private String body;
+    @NotNull
+    private JsonNullable<String> body;
 }
